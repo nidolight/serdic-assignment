@@ -1,5 +1,3 @@
-// src/pages/PointCloudViewer/index.jsx
-
 import React, { useState, useEffect, Suspense, useRef } from 'react';
 import { Canvas, useLoader, useFrame, useThree  } from '@react-three/fiber'; // 1. R3F 핵심 모듈
 import { OrbitControls, Center, Grid } from '@react-three/drei'; // 2. 유용한 헬퍼들 (카메라 컨트롤, 중앙 정렬)
@@ -20,7 +18,6 @@ const PointCloudModel = ({ url, pointSize, depthScale }) => {
       <group scale={[1, 1, depthScale]}> 
         <points>
           <primitive object={geometry} attach="geometry" />
-          {/* ❗ Point Size 적용: pointsMaterial의 size prop으로 사용 ❗ */}
           <pointsMaterial 
             size={pointSize} 
             vertexColors={true} 
@@ -73,12 +70,12 @@ const PointCloudViewer = () => {
   const [cameraInfo, setCameraInfo] = useState({ 
       position: [0, 0, 5], 
       target: [0, 0, 0],
-      pitch: 0,         // 새로 추가
-      yaw: 0,           // 새로 추가
-      distance: 5       // 새로 추가 (초기 카메라 위치 [0,0,5]와 타겟 [0,0,0] 사이의 거리)
+      pitch: 0,        
+      yaw: 0,          
+      distance: 5       // 초기 카메라 위치 [0,0,5]와 타겟 [0,0,0] 사이의 거리
     });
-  const [showGrid, setShowGrid] = useState(true); // 그리드 보이기
-  const [showAxes, setShowAxes] = useState(true); // 축 보이기
+  const [showGrid, setShowGrid] = useState(true);
+  const [showAxes, setShowAxes] = useState(true); 
 
   // 파일 선택 핸들러
   const handleFileChange = (event) => {
@@ -107,23 +104,18 @@ const PointCloudViewer = () => {
     };
   }, [fileUrl]);
 
-  // ❗ 1. OrbitControls 인스턴스에 접근하기 위한 Ref 선언 ❗
   const controlsRef = useRef(null);
 
-  // ❗ 2. 뷰 리셋 핸들러 함수 ❗
   const handleResetView = () => {
     if (controlsRef.current) {
-      // OrbitControls의 reset() 메소드 호출
       controlsRef.current.reset();
     }
   };
 
   return (
-    // 💡 변경: h2를 Flex 컨테이너 밖에 배치하여 전체 상단에 오도록 함
     <div className={styles.containerWrapper}>
       <h2 className={styles.mainTitle}>Point Cloud Viewer</h2> 
       
-      {/* 💡 변경: 메인 컨테이너에 flex 스타일 적용 */}
       <div className={styles.container}> 
         
         {/* 뷰어 영역 (왼쪽) */}
