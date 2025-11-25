@@ -2,34 +2,28 @@ import { useState } from 'react'
 import reactLogo from './assets/react.svg'
 import viteLogo from '/vite.svg'
 import './App.css'
+import Button from './components/common/Button/Button';
 
 function App() {
-  const [count, setCount] = useState(0)
-
   return (
-    <>
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
+    <div style={{ padding: '40px' }}>
+      <h1>Button 컴포넌트 테스트</h1>
+      <div style={{ display: 'flex', gap: '20px', alignItems: 'center' }}>
+        <Button variant="primary" onClick={() => alert('Primary Click!')}>
+          3D 모델 로드
+        </Button>
+        <Button variant="secondary" size="small">
+          설정 저장
+        </Button>
+        <Button variant="tertiary" size="large">
+          데이터 다운로드
+        </Button>
+        <Button variant="primary" disabled>
+          데이터 분석 (비활성화)
+        </Button>
       </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
-  )
+    </div>
+  );
 }
 
-export default App
+export default App;

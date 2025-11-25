@@ -1,0 +1,77 @@
+/* ================================================= */
+/* 1. 기본 버튼 스타일 */
+/* ================================================= */
+.btn {
+  /* 기본 설정 */
+  border: none;
+  border-radius: 12px; 
+  cursor: pointer;
+  transition: all 0.2s ease-in-out;
+  font-family: var(--font-family-primary);
+  font-weight: 500;
+  outline: none;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+/* ================================================= */
+/* 2. 크기 (Size) 스타일 */
+/* ================================================= */
+.small {
+  padding: 8px 16px;
+  font-size: 14px;
+}
+
+.medium {
+  padding: 10px 20px;
+  font-size: 16px;
+}
+
+.large {
+  padding: 14px 28px;
+  font-size: 18px;
+}
+
+/* ================================================= */
+/* 3. 형태 (Variant) 스타일 - 색상 변수 사용 */
+/* ================================================= */
+
+/* Primary (주요 동작 버튼) - BG3 색상 사용 */
+.primary {
+  background-color: var(--color-bg-3); /* #511D60 */
+  color: var(--color-text-headline); /* #FFFFFF */
+}
+
+.primary:hover:not(:disabled) {
+  background-color: var(--color-bg-4); /* #40184C */
+}
+
+/* Secondary (보조 동작 버튼) - BG6 색상 사용 */
+.secondary {
+  background-color: var(--color-bg-6); /* #252728 */
+  color: var(--color-text-p1); /* #F0F0F0 */
+}
+
+.secondary:hover:not(:disabled) {
+  background-color: #3b3e3f; /* BG6보다 약간 밝게 */
+}
+
+/* Tertiary (클릭 가능한 텍스트나 경계선만 있는 버튼) */
+.tertiary {
+  background-color: transparent;
+  color: var(--color-link); /* #2683EB */
+  border: 1px solid var(--color-link);
+}
+
+.tertiary:hover:not(:disabled) {
+  background-color: rgba(38, 131, 235, 0.1);
+}
+
+/* ================================================= */
+/* 4. 비활성화 (Disabled) 상태 스타일 */
+/* ================================================= */
+.btn:disabled {
+  background-color: var(--color-bg-6); /* 어두운 배경 */
+  color: var(--color-text-p2); /* 흐린 텍스트 */
+  cursor: not-allowed;
+  opacity: 0.6;
+}
