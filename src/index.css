@@ -129,3 +129,13 @@ button:focus,
 button:focus-visible {
   outline: 4px auto -webkit-focus-ring-color;
 }
+
+.mainContent {
+  margin-left: 102px;
+  margin-top: 82px;
+  margin-right: 12px; 
+  min-height: calc(100vh - 94px); 
+  padding: 20px; 
+  background-color: var(--color-bg-6); 
+  border-radius: 12px; 
+}
