@@ -1,11 +1,43 @@
+@import url('https://fonts.googleapis.com/css2?family=Radio+Canada+Big:ital,wght@0,400..700;1,400..700&display=swap');
+
 :root {
-  font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
+  --font-family-primary: 'Radio Canada Big', sans-serif;
+  
+  --h1-size: 80px;
+  --h2-size: 65px;
+  --h3-size: 65px;
+  --h4-size: 56px;
+  --h5-size: 40px;
+  
+  --heading-line-height: 100%;
+  --heading-letter-spacing: -0.05em; 
+
+  --p1-size: 20px;
+  --p2-size: 20px;
+  --paragraph-line-height: 150%;
+  --paragraph-letter-spacing: -0.02em;
+
+  /* --- 색상 변수 정의 --- */
+  --color-bg-1: #FFFFFF;
+  --color-bg-2: #F8F8F5;
+  --color-bg-3: #511D60;
+  --color-bg-4: #40184C;
+  --color-bg-5: #17181F;
+  --color-bg-6: #252728;
+  
+  --color-text-headline: #FFFFFF;
+  --color-text-p1: #F0F0F0; 
+  --color-text-p2: #6C6C6C;
+  --color-text-p3: #422C71;
+  --color-link: #2683EB;
+
+  font-family: var(--font-family-primary), system-ui, Avenir, Helvetica, Arial, sans-serif;
   line-height: 1.5;
   font-weight: 400;
 
-  color-scheme: light dark;
-  color: rgba(255, 255, 255, 0.87);
-  background-color: #242424;
+  color-scheme: dark; 
+  color: var(--color-text-p1);
+  background-color: var(--color-bg-5);
 
   font-synthesis: none;
   text-rendering: optimizeLegibility;
@@ -13,15 +45,7 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
-a {
-  font-weight: 500;
-  color: #646cff;
-  text-decoration: inherit;
-}
-a:hover {
-  color: #535bf2;
-}
-
+/* 기존 body 스타일 블록 수정 */
 body {
   margin: 0;
   display: flex;
@@ -30,39 +54,78 @@ body {
   min-height: 100vh;
 }
 
-h1 {
-  font-size: 3.2em;
-  line-height: 1.1;
+/* 링크 스타일 수정 */
+a {
+  font-weight: 500;
+  color: var(--color-link);
+  text-decoration: inherit;
+}
+a:hover {
+  color: #1a65b9;
 }
 
+/* 헤딩 태그 스타일 수정 */
+h1 {
+  font-size: var(--h1-size); 
+  line-height: var(--heading-line-height);
+  letter-spacing: var(--heading-letter-spacing);
+  color: var(--color-text-headline);
+  margin: 0; 
+}
+
+/* h2~h5 태그에 대한 추가 정의 */
+h2 {
+  font-size: var(--h2-size); 
+  line-height: var(--heading-line-height);
+  letter-spacing: var(--heading-letter-spacing);
+  color: var(--color-text-headline);
+}
+h3 {
+  font-size: var(--h3-size); 
+  line-height: var(--heading-line-height);
+  letter-spacing: var(--heading-letter-spacing);
+  color: var(--color-text-headline);
+}
+h4 {
+  font-size: var(--h4-size); 
+  line-height: var(--heading-line-height);
+  letter-spacing: var(--heading-letter-spacing);
+  color: var(--color-text-headline);
+}
+h5 {
+  font-size: var(--h5-size); 
+  line-height: var(--heading-line-height);
+  letter-spacing: var(--heading-letter-spacing);
+  color: var(--color-text-headline);
+}
+
+/* p 태그 기본 스타일 정의 */
+p {
+  font-size: var(--p1-size);
+  line-height: var(--paragraph-line-height);
+  letter-spacing: var(--paragraph-letter-spacing);
+  color: var(--color-text-p1);
+  margin: 0 0 1em 0;
+}
+
+
+/* 버튼 스타일 수정 */
 button {
   border-radius: 8px;
   border: 1px solid transparent;
   padding: 0.6em 1.2em;
   font-size: 1em;
   font-weight: 500;
-  font-family: inherit;
-  background-color: #1a1a1a;
+  font-family: inherit; 
+  background-color: var(--color-bg-6); 
+  color: var(--color-text-headline); 
   cursor: pointer;
   transition: border-color 0.25s;
 }
 button:hover {
-  border-color: #646cff;
+  border-color: var(--color-bg-3);
 }
 button:focus,
 button:focus-visible {
   outline: 4px auto -webkit-focus-ring-color;
-}
-
-@media (prefers-color-scheme: light) {
-  :root {
-    color: #213547;
-    background-color: #ffffff;
-  }
-  a:hover {
-    color: #747bff;
-  }
-  button {
-    background-color: #f9f9f9;
-  }
 }
