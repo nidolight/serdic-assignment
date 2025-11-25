@@ -1,7 +1,7 @@
 // src/pages/PointCloudViewer/index.jsx
 
 import React, { useState, useEffect, Suspense } from 'react';
-import { Canvas, useLoader } from '@react-three/fiber'; // 1. R3F 핵심 모듈
+import { Canvas, useLoader, useFrame, useThree  } from '@react-three/fiber'; // 1. R3F 핵심 모듈
 import { OrbitControls, Center, Grid } from '@react-three/drei'; // 2. 유용한 헬퍼들 (카메라 컨트롤, 중앙 정렬)
 import { PLYLoader } from 'three/examples/jsm/loaders/PLYLoader'; // 3. PLY 파일 로더
 import styles from './PointCloudViewer.module.css';
@@ -31,6 +31,38 @@ const PointCloudModel = ({ url, pointSize, depthScale }) => {
     );
 };
 
+const CameraInfoUpdater = ({ setCameraInfo }) => {
+  // useThree()를 사용하여 캔버스의 현재 상태 (카메라, 컨트롤 등)에 접근
+  const { camera, controls } = useThree();
+
+  useFrame(() => {
+    // OrbitControls가 로드된 후에만 실행되도록 체크
+    // controls는 OrbitControls에서 makeDefault prop을 사용했으므로 접근 가능
+    if (controls) {
+      // 카메라 정보를 React 상태로 업데이트
+      setCameraInfo({
+        position: [
+          camera.position.x, 
+          camera.position.y, 
+          camera.position.z
+        ],
+        target: [
+          controls.target.x,
+          controls.target.y,
+          controls.target.z
+        ],
+        // pitch (X축 회전)와 yaw (Y축 회전)은 각도(Degree)로 변환
+        pitch: camera.rotation.x * (180 / Math.PI), 
+        yaw: camera.rotation.y * (180 / Math.PI),
+        // 카메라와 타겟 사이의 거리 계산
+        distance: camera.position.distanceTo(controls.target)
+      });
+    }
+  });
+
+  return null; // 뷰어에 아무것도 렌더링하지 않음
+};
+
 const PointCloudViewer = () => {
   const [file, setFile] = useState(null);
   const [fileUrl, setFileUrl] = useState(null); // 4. 로더에 전달할 URL 상태
@@ -38,8 +70,13 @@ const PointCloudViewer = () => {
   const [pointSize, setPointSize] = useState(0.05); // 초기 점 크기: 0.05
   const [depthScale, setDepthScale] = useState(1.0);  // 초기 깊이 스케일: 1.0
   // 카메라 초기 정보 (위치, 타겟)
-  const [cameraInfo, setCameraInfo] = useState({ position: [0, 0, 5], target: [0, 0, 0] });
-
+  const [cameraInfo, setCameraInfo] = useState({ 
+      position: [0, 0, 5], 
+      target: [0, 0, 0],
+      pitch: 0,         // 새로 추가
+      yaw: 0,           // 새로 추가
+      distance: 5       // 새로 추가 (초기 카메라 위치 [0,0,5]와 타겟 [0,0,0] 사이의 거리)
+    });
   const [showGrid, setShowGrid] = useState(true); // 그리드 보이기
   const [showAxes, setShowAxes] = useState(true); // 축 보이기
 
@@ -92,7 +129,7 @@ const PointCloudViewer = () => {
 
           {/* 1. Point Size 슬라이더 */}
           <label className={styles.sliderLabel}>
-            Point Size: **{pointSize.toFixed(3)}**
+            Point Size: {pointSize.toFixed(3)}
             <input
               type="range"
               min="0.001"
@@ -106,7 +143,7 @@ const PointCloudViewer = () => {
 
           {/* 2. Depth Scale 슬라이더 */}
           <label className={styles.sliderLabel}>
-            Depth Scale: **{depthScale.toFixed(1)}**
+            Depth Scale: {depthScale.toFixed(1)}
             <input
               type="range"
               min="0.1"
@@ -136,6 +173,14 @@ const PointCloudViewer = () => {
           >
             {showAxes ? '✅ Axes 보이기' : '❌ Axes 숨기기'}
           </button>
+
+          <h3 className={styles.controlsTitle}>📷 카메라 정보</h3>
+          <ul className={styles.infoList}>
+            <li>Position: {cameraInfo.position.map(v => v.toFixed(2)).join(', ')}</li>
+            <li>Target: {cameraInfo.target.map(v => v.toFixed(2)).join(', ')}</li>
+            <li>Pitch / Yaw: {cameraInfo.pitch.toFixed(1)}° / {cameraInfo.yaw.toFixed(1)}°</li>
+            <li>Distance: {cameraInfo.distance.toFixed(2)}</li>
+          </ul>
         </div>
       </div>
 
@@ -173,6 +218,11 @@ const PointCloudViewer = () => {
             
             {/* 마우스로 화면을 돌려볼 수 있게 해주는 컨트롤 */}
             <OrbitControls makeDefault />
+
+            <CameraInfoUpdater setCameraInfo={setCameraInfo} /> 
+
+            <OrbitControls makeDefault />
+
           </Canvas>
         ) : (
           <div style={{ color: '#888' }}>포인트 클라우드 파일을 첨부해주세요.</div>
@@ -181,9 +231,9 @@ const PointCloudViewer = () => {
       <div className={styles.controlsSection}>
           <h3 className={styles.controlsTitle}>조작 방법 (OrbitControls)</h3>
           <ul className={styles.controlList}>
-            <li>🖱️ **회전 (Rotate):** 마우스 좌클릭 + 드래그</li>
-            <li>🖐️ **이동 (Pan):** 마우스 우클릭 + 드래그 또는 Ctrl/Cmd + 좌클릭 + 드래그</li>
-            <li>🔍 **확대/축소 (Zoom):** 마우스 휠 스크롤</li>
+            <li>🖱️ 회전 (Rotate): 마우스 좌클릭 + 드래그</li>
+            <li>🖐️ 이동 (Pan): 마우스 우클릭 + 드래그 또는 Ctrl/Cmd + 좌클릭 + 드래그</li>
+            <li>🔍 확대/축소 (Zoom): 마우스 휠 스크롤</li>
           </ul>
         </div>
     </div>
