@@ -1,6 +1,6 @@
 // src/pages/PointCloudViewer/index.jsx
 
-import React, { useState, useEffect, Suspense } from 'react';
+import React, { useState, useEffect, Suspense, useRef } from 'react';
 import { Canvas, useLoader, useFrame, useThree  } from '@react-three/fiber'; // 1. R3F 핵심 모듈
 import { OrbitControls, Center, Grid } from '@react-three/drei'; // 2. 유용한 헬퍼들 (카메라 컨트롤, 중앙 정렬)
 import { PLYLoader } from 'three/examples/jsm/loaders/PLYLoader'; // 3. PLY 파일 로더
@@ -98,6 +98,7 @@ const PointCloudViewer = () => {
       alert('유효한 .ply 파일을 선택해주세요.');
     }
   };
+  
 
   // 컴포넌트 언마운트 시 메모리 누수 방지
   useEffect(() => {
@@ -105,6 +106,17 @@ const PointCloudViewer = () => {
       if (fileUrl) URL.revokeObjectURL(fileUrl);
     };
   }, [fileUrl]);
+
+  // ❗ 1. OrbitControls 인스턴스에 접근하기 위한 Ref 선언 ❗
+  const controlsRef = useRef(null);
+
+  // ❗ 2. 뷰 리셋 핸들러 함수 ❗
+  const handleResetView = () => {
+    if (controlsRef.current) {
+      // OrbitControls의 reset() 메소드 호출
+      controlsRef.current.reset();
+    }
+  };
 
   return (
     <div className={styles.container}>
@@ -173,7 +185,6 @@ const PointCloudViewer = () => {
           >
             {showAxes ? '✅ Axes 보이기' : '❌ Axes 숨기기'}
           </button>
-
           <h3 className={styles.controlsTitle}>📷 카메라 정보</h3>
           <ul className={styles.infoList}>
             <li>Position: {cameraInfo.position.map(v => v.toFixed(2)).join(', ')}</li>
@@ -181,6 +192,12 @@ const PointCloudViewer = () => {
             <li>Pitch / Yaw: {cameraInfo.pitch.toFixed(1)}° / {cameraInfo.yaw.toFixed(1)}°</li>
             <li>Distance: {cameraInfo.distance.toFixed(2)}</li>
           </ul>
+          <button 
+            onClick={handleResetView}
+            className={styles.resetButton}
+          >
+            🔄 Reset View
+          </button>
         </div>
       </div>
 
@@ -221,8 +238,10 @@ const PointCloudViewer = () => {
 
             <CameraInfoUpdater setCameraInfo={setCameraInfo} /> 
 
-            <OrbitControls makeDefault />
-
+            <OrbitControls 
+              ref={controlsRef}
+              makeDefault 
+            />
           </Canvas>
         ) : (
           <div style={{ color: '#888' }}>포인트 클라우드 파일을 첨부해주세요.</div>

@@ -120,3 +120,22 @@
   /* 정보를 왼쪽 정렬 */
   text-align: left;
 }
+
+
+.resetButton {
+  width: 100%;
+  padding: 10px;
+  background-color: var(--color-bg-5); /* 어두운 배경 */
+  color: var(--color-text-headline);
+  border: 1px solid var(--color-border-1);
+  border-radius: 4px;
+  cursor: pointer;
+  font-weight: 600;
+  transition: all 0.2s;
+  margin-top: 10px; /* 파일 첨부 버튼과의 간격 확보 */
+}
+
+.resetButton:hover {
+  background-color: var(--color-bg-4);
+  border-color: var(--color-link);
+}
