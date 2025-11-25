@@ -40,14 +40,15 @@
 ### 3.2. 프로젝트 설치
 
 1.  **레포지토리 클론:**
-    ```bash
-    git clone https://github.com/nidolight/serdic-assignment/
+```
+    git clone https://github.com/nidolight/serdic-assignment/
     cd serdic-assignment
-    ```
+```
+
 2.  **의존성 설치:**
-    ```bash
+```
     npm install
-    ```
+```
 
 ### 3.3. 실행 및 빌드
 
