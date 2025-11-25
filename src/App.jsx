@@ -1,28 +1,26 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
-import Button from './components/common/Button/Button';
+import React from 'react';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+
+// 1. 레이아웃 컴포넌트 Import
+import Sidebar from './components/layouts/Sidebar/Sidebar'; 
+
+// 2. 페이지 컴포넌트 Import
+import HomePage from './pages/HomePage';
+import PointCloudViewer from './pages/PointCloudViewer';
+import DepthMapViewer from './pages/DepthMapViewer';
 
 function App() {
   return (
-    <div style={{ padding: '40px' }}>
-      <h1>Button 컴포넌트 테스트</h1>
-      <div style={{ display: 'flex', gap: '20px', alignItems: 'center' }}>
-        <Button variant="primary" onClick={() => alert('Primary Click!')}>
-          3D 모델 로드
-        </Button>
-        <Button variant="secondary" size="small">
-          설정 저장
-        </Button>
-        <Button variant="tertiary" size="large">
-          데이터 다운로드
-        </Button>
-        <Button variant="primary" disabled>
-          데이터 분석 (비활성화)
-        </Button>
-      </div>
-    </div>
+    <Router>
+      <Sidebar />
+            <main style={{ marginLeft: '82px', minHeight: '100vh' }}>
+        <Routes>
+          <Route path="/" element={<HomePage />} />
+          <Route path="/point-cloud-viewer" element={<PointCloudViewer />} />
+          <Route path="/depth-map-viewer" element={<DepthMapViewer />} />
+        </Routes>
+      </main>
+    </Router>
   );
 }
 
