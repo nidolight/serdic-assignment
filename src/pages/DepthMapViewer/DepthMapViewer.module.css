@@ -1,59 +1,215 @@
-/* DepthMapViewer.module.css */
-
-.container {
-    display: flex; 
-    /* 뷰어와 컨트롤 패널을 수평으로 나눕니다. */
-    height: 100%; 
+/* 🚀 전체 컨테이너 Wrapper: 제목을 포함하고 중앙 정렬 */
+.containerWrapper {
+    max-width: 1600px; /* 최대 너비 설정 */
+    margin: 0 auto;
     padding: 20px;
-    gap: 20px;
 }
 
-.controls {
-    flex: 0 0 320px; 
-    /* 컨트롤 패널의 너비를 고정합니다. */
-    padding: 15px;
-    border-right: 1px solid #eee;
-    overflow-y: auto;
-    /* 만약 사이드바가 뷰어 위에 겹치면 z-index를 올려야 합니다. */
-    position: relative; 
-    z-index: 2;
+/* 제목 H2 스타일 */
+.mainTitle {
+    width: 100%; /* 전체 너비 사용 */
+    text-align: center;
+    margin-bottom: 46px;
+    margin-top: 0px;
+    font-size: 28px;
 }
 
+/* 🚀 메인 컨테이너: Flexbox를 사용하여 뷰어와 컨트롤 영역 분리 */
+.container {
+    display: flex;
+    gap: 20px; /* 뷰어와 컨트롤 패널 사이의 간격 */
+}
+
+/* 🖼️ 뷰어 영역 (캔버스) */
 .viewerArea {
-    flex: 1; 
-    /* 뷰어 영역이 남은 공간을 모두 차지합니다. */
-    min-height: 500px; 
-    /* 캔버스가 렌더링될 최소 크기를 확보합니다. */
-    position: relative;
-    z-index: 1;
+    flex-grow: 1; /* 남은 공간을 모두 차지 */
+    min-height: 700px; /* 최소 높이 설정 (세로 크기 확보) */
+    min-width: 700px;
+    background-color: #111; /* 배경색 통일 */
+    border-radius: 12px;
+    overflow: hidden; 
+    display: flex; 
+    justify-content: center;
+    align-items: center;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2); 
 }
 
-/* 추가: 컨트롤 요소 스타일 */
-.controlsSection {
-    margin-bottom: 20px;
-    padding: 10px 0;
-    border-top: 1px solid #f0f0f0;
+/* ❗ 뷰어 영역 내부의 Canvas를 100%로 설정 */
+.viewerArea canvas {
+    width: 100% !important;
+    height: 100% !important;
+    display: block;
 }
+
+/* ⚙️ 컨트롤 패널 영역 (우측 사이드바) */
+.controls {
+    width: 300px; 
+    min-width: 300px;
+    overflow-y: auto; 
+    
+    background-color: #222; /* 배경색 설정 (var 대신 임시 색상 사용) */
+    padding: 20px; 
+    border-radius: 12px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+
+/* --- 공통 UI 요소 스타일 --- */
+
+/* 파일 업로드 버튼 */
+.uploadButton {
+    width: 100%;
+    padding: 12px;
+    background-color: #007bff; /* 파란색 계열 */
+    color: #FFFFFF;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: 600;
+    font-size: 15px;
+    transition: background-color 0.2s;
+    margin-bottom: 20px;
+}
+.uploadButton:hover {
+    background-color: #0056b3;
+}
+
+
+/* 컨트롤 섹션 */
+.controlsSection {
+    padding: 15px 0;
+    border-bottom: 1px solid #333; /* 어두운 배경에 맞는 구분선 */
+}
+
+.controlsSection:last-child {
+    border-bottom: none;
+}
+
 .controlsTitle {
-    font-size: 1.1em;
+    font-size: 16px;
+    font-weight: 700;
+    color: #fff;
+    margin-top: 0;
+    margin-bottom: 15px;
+    padding-bottom: 5px;
+    border-bottom: 2px solid #333;
+}
+
+/* 슬라이더 라벨 */
+.sliderLabel {
+    display: block;
+    margin-bottom: 15px;
+    font-size: 14px;
+    color: #ccc;
+    font-weight: 500;
+}
+
+/* 슬라이더 인풋 */
+.sliderInput {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 100%;
+    height: 8px;
+    background: #333;
+    outline: none;
+    opacity: 0.9;
+    transition: opacity 0.2s;
+    border-radius: 4px;
+    margin-top: 5px;
+}
+.sliderInput::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 18px;
+    height: 18px;
+    background: #007bff;
+    cursor: pointer;
+    border-radius: 50%;
+}
+
+/* 토글 버튼 그룹 */
+.toggleGroup {
+    display: flex;
+    gap: 10px;
     margin-bottom: 10px;
 }
-.resetButton {
-    /* 간단한 버튼 스타일 */
-    padding: 8px 15px;
+
+/* 토글 버튼 기본 스타일 */
+.toggleActive, .toggleInactive {
+    flex-grow: 1; 
+    padding: 10px;
+    border: 1px solid transparent;
+    border-radius: 6px;
+    font-size: 14px;
     cursor: pointer;
+    transition: all 0.2s;
+    text-align: center;
+}
+
+/* 활성화 상태 */
+.toggleActive {
     background-color: #007bff;
-    color: white;
-    border: none;
-    border-radius: 4px;
-    margin-top: 10px;
+    color: #FFFFFF;
+    font-weight: 600;
 }
-.status {
-    margin: 10px 0;
-    font-style: italic;
+
+/* 비활성화 상태 */
+.toggleInactive {
+    background-color: #444;
+    color: #ccc;
+    border-color: #555;
 }
+.toggleInactive:hover {
+    background-color: #555;
+}
+
+/* 정보 목록 */
 .infoList {
     list-style: none;
     padding: 0;
-    font-size: 0.9em;
+    margin: 0;
+    font-size: 13px;
+    line-height: 1.8;
+    color: #ccc;
+}
+.infoList li {
+    text-align: left;
+    padding: 2px 0;
+    border-bottom: 1px dashed #333;
+}
+.infoList li:last-child {
+    border-bottom: none;
+}
+
+/* 리셋 버튼 */
+.resetButton {
+    width: 100%;
+    padding: 10px;
+    background-color: #444;
+    color: #fff;
+    border: 1px solid #555;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: 600;
+    transition: all 0.2s;
+    margin-top: 15px;
+}
+.resetButton:hover {
+    background-color: #555;
+    border-color: #007bff;
+}
+
+/* 조작 방법 목록 */
+.controlList {
+    list-style: none;
+    padding: 0 0 0 10px;
+    margin: 0;
+    font-size: 13px;
+    line-height: 1.6;
+    color: #ccc;
+}
+
+.controlList li {
+    margin-bottom: 5px;
+    text-align: left;
 }

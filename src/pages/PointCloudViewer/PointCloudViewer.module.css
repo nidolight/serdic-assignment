@@ -1,42 +1,115 @@
-.viewerArea {
-  background-color: var(--color-bg-7); 
-  border-radius: 8px;
-  overflow: hidden; 
-  /* ❗ 중요: 자식 요소가 공간을 채우도록 Flex 컨테이너 속성 추가 ❗ */
-  display: flex; 
-  /* flex-grow: 1; */ /* 이미 Grid로 크기가 설정되어 있어 필요 없지만, 안전을 위해 */
-  
-  /* 기존에 있던 justify/align-items는 Canvas 렌더링 시 제거하거나 주석 처리해야 합니다. 
-     지금은 Canvas가 100%를 차지하게 하는 데 집중합니다. */
-  justify-content: center;
-  align-items: center;
+/* 🚀 메인 컨테이너: Flexbox를 사용하여 뷰어와 컨트롤 영역 분리 */
+.container {
+  display: flex;
+  gap: 20px; /* 뷰어와 컨트롤 패널 사이의 간격 */
+  padding: 20px;
+  max-width: 1600px; /* 최대 너비 설정 */
+  margin: 0 auto;
 }
 
-/* ❗ 추가: viewerArea 내부의 Canvas(실제 3D 뷰포트)를 100%로 설정 ❗ */
+/* 🖼️ 뷰어 영역 (캔버스) */
+.viewerArea {
+  flex-grow: 1; /* 남은 공간을 모두 차지 */
+  min-height: 500px; /* 최소 높이 설정 (가로 레이아웃에 적합) */
+  min-width: 700px;
+  background-color: var(--color-bg-5); 
+  border-radius: 12px;
+  overflow: hidden; 
+  display: flex; 
+  justify-content: center;
+  align-items: center;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2); /* 그림자 추가 */
+}
+
+/* ❗ 뷰어 영역 내부의 Canvas를 100%로 설정 */
 .viewerArea canvas {
   width: 100% !important;
   height: 100% !important;
   display: block;
 }
 
+/* ⚙️ 컨트롤 패널 영역 (우측 사이드바) */
+.controls {
+    width: 300px; 
+    min-width: 300px;
+    height: 100%;
+    overflow-y: auto; 
+    
+    background-color: var(--color-bg-8);
+    /* 💡 변경: 기존 20px 패딩 유지 */
+    padding: 20px; 
+    border-radius: 12px;
+}
+
+/* 컨트롤 섹션 (슬라이더, 토글 등 그룹) */
+.controlsSection {
+  padding: 15px 0;
+  border-bottom: 1px solid var(--color-border-2);
+}
+
+.controlsSection:last-child {
+  border-bottom: none;
+}
+
+.controlsTitle {
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--color-text-headline);
+  margin-top: 0;
+  margin-bottom: 15px;
+  padding-bottom: 5px;
+  border-bottom: 2px solid var(--color-bg-5);
+}
+
+/* 제목 H2 스타일 */
+h2 {
+    width: 100%; /* 전체 너비 사용 */
+    text-align: center;
+    margin-bottom: 25px;
+    font-size: 28px;
+}
+
+/* 파일 업로드 버튼 */
+.uploadButton {
+  width: 100%;
+  padding: 12px;
+  background-color: var(--color-link);
+  color: #FFFFFF;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 600;
+  font-size: 15px;
+  transition: background-color 0.2s;
+  margin-bottom: 20px;
+}
+
+.uploadButton:hover {
+  background-color: color-mix(in srgb, var(--color-link) 90%, black);
+}
+
+
+/* --- 기존 스타일 (가독성 개선 포함) --- */
+
 .sliderLabel {
   display: block;
-  margin-bottom: 10px;
+  margin-bottom: 15px;
   font-size: 14px;
   color: var(--color-text-body);
+  font-weight: 500;
 }
 
 .sliderInput {
-  /* 브라우저 기본 스타일 초기화 */
   -webkit-appearance: none;
   appearance: none;
   width: 100%;
   height: 8px;
-  background: var(--color-bg-4);
+  background: var(--color-bg-5);
   outline: none;
-  opacity: 0.7;
+  opacity: 0.9;
   transition: opacity 0.2s;
   border-radius: 4px;
+  margin-top: 5px;
 }
 
 .sliderInput:hover {
@@ -47,58 +120,58 @@
 .sliderInput::-webkit-slider-thumb {
   -webkit-appearance: none;
   appearance: none;
-  width: 16px;
-  height: 16px;
-  background: var(--color-link);
+  width: 18px; /* 크기 약간 키움 */
+  height: 18px;
+  background: var(--color-text-p3);
   cursor: pointer;
   border-radius: 50%;
+  box-shadow: 0 0 2px rgba(0, 0, 0, 0.3);
 }
 
 .sliderInput::-moz-range-thumb {
-  width: 16px;
-  height: 16px;
-  background: var(--color-link);
+  width: 18px;
+  height: 18px;
+  background: var(--color-text-p3);
   cursor: pointer;
   border-radius: 50%;
+  border: none;
 }
 
 .toggleGroup {
-  display: flex;
-  gap: 10px;
-}
-
-.toggleButton, .toggleButtonActive {
-  padding: 8px 12px;
-  border: 1px solid var(--color-border-1);
-  border-radius: 4px;
-  cursor: pointer;
-  font-size: 13px;
-  transition: background-color 0.2s, border-color 0.2s;
-  flex-grow: 1; /* 가로 공간을 균등하게 채우기 */
+    display: flex;
+    gap: 10px; /* 버튼 사이의 간격: 이미 10px로 설정되어 있습니다. */
+    margin-bottom: 10px; 
+    
+    /* 💡 추가: 버튼들이 그룹 내에서 수평적으로 가운데 정렬되도록 함 (선택 사항, 필요시) */
+    /* justify-content: center; */
 }
 
 /* 토글 버튼 기본 스타일 */
 .toggleActive, .toggleInactive {
-  width: 100%;
-  padding: 8px;
-  margin-bottom: 5px;
-  border: 1px solid transparent;
-  border-radius: 4px;
-  font-size: 14px;
-  cursor: pointer;
-  transition: all 0.2s;
+    flex-grow: 1; 
+    padding: 10px;
+    margin-bottom: 0px; 
+    border: 1px solid transparent;
+    border-radius: 6px;
+    font-size: 14px;
+    cursor: pointer;
+    transition: all 0.2s;
+    
+    /* 💡 확인: 텍스트 정렬이 가운데인지 확인 (Flex 항목이므로 필요 없을 수 있지만 명시적 지정) */
+    text-align: center;
 }
 
 /* 활성화 상태 (Grid/Axes 보이기) */
 .toggleActive {
-  background-color: var(--color-link); /* 주 색상 */
+  background-color: var(--color-text-p3);
   color: #FFFFFF;
   border-color: var(--color-link);
+  font-weight: 600;
 }
 
 /* 비활성화 상태 (Grid/Axes 숨기기) */
 .toggleInactive {
-  background-color: var(--color-bg-4); /* 어두운 배경색 */
+  background-color: var(--color-bg-4);
   color: var(--color-text-body);
   border-color: var(--color-border-1);
 }
@@ -117,25 +190,44 @@
 }
 
 .infoList li {
-  /* 정보를 왼쪽 정렬 */
   text-align: left;
+  padding: 2px 0;
+  border-bottom: 1px dashed var(--color-border-2);
+}
+.infoList li:last-child {
+    border-bottom: none;
 }
 
 
 .resetButton {
   width: 100%;
   padding: 10px;
-  background-color: var(--color-bg-5); /* 어두운 배경 */
+  background-color: var(--color-bg-5);
   color: var(--color-text-headline);
   border: 1px solid var(--color-border-1);
-  border-radius: 4px;
+  border-radius: 6px;
   cursor: pointer;
   font-weight: 600;
   transition: all 0.2s;
-  margin-top: 10px; /* 파일 첨부 버튼과의 간격 확보 */
+  margin-top: 15px;
 }
 
 .resetButton:hover {
   background-color: var(--color-bg-4);
   border-color: var(--color-link);
+}
+
+/* 💡 추가: 조작 방법 목록 스타일링 */
+.controlList {
+    list-style: none;
+    padding: 0 0 0 10px;
+    margin: 0;
+    font-size: 13px;
+    line-height: 1.6;
+    color: var(--color-text-body);
+}
+
+.controlList li {
+    margin-bottom: 5px;
+    text-align: left;
 }

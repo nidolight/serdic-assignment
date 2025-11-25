@@ -181,91 +181,118 @@ const DepthMapViewer = () => {
     };
 
     return (
-        <div className={styles.container}>
-            <h2>Depth Map Viewer</h2>
+        <div className={styles.containerWrapper}>
+            <h2 className={styles.mainTitle}>Depth Map Viewer</h2>
             
-            <div className={styles.controls}>
-                {/* 1. 파일 입력 */}
-                <input 
-                    type="file" 
-                    accept=".npz" 
-                    onChange={handleFileChange} 
-                />
-                <p className={styles.status}>
-                    {file ? `✅ 파일 로드 완료: ${file.name}` : '파일을 선택해주세요.'}
-                </p>
-
-                {/* 2. 리셋 버튼 */}
-                <button onClick={handleResetView} className={styles.resetButton}>
-                    🔄 Reset View
-                </button>
+            <div className={styles.container}>
                 
-                {/* 3. 뷰어 조정 */}
-                <div className={styles.controlsSection}>
-                    <h3 className={styles.controlsTitle}>📊 뷰어 조정</h3>
-                    <label className={styles.sliderLabel}>
-                        Depth Scale: **{depthScale.toFixed(1)}**
-                        <input
-                            type="range"
-                            min="0.1"
-                            max="5.0"
-                            step="0.1"
-                            value={depthScale}
-                            onChange={(e) => setDepthScale(parseFloat(e.target.value))}
-                            className={styles.sliderInput}
+                {/* 뷰어 영역 (왼쪽) */}
+                <div className={styles.viewerArea}>
+                    <Canvas camera={{ position: [0, 0, 15], fov: 50 }}>
+                        <color attach="background" args={['#111']} /> 
+                        <ambientLight intensity={0.5} />
+                        <directionalLight position={[5, 10, 5]} intensity={1} />
+
+                        <Grid 
+                            renderOrder={-1} 
+                            cellSize={1} 
+                            sectionSize={5} 
+                            visible={showGrid}
+                            position={[0, 0.001, 0]} 
+                            fadeDistance={50}
+                            infiniteGrid
                         />
-                    </label>
-                </div>
-                
-                {/* 4. 디스플레이 설정 */}
-                <div className={styles.controlsSection}>
-                    <h3 className={styles.controlsTitle}>🖼️ 디스플레이 설정</h3>
-                    <button 
-                        className={showGrid ? styles.toggleActive : styles.toggleInactive}
-                        onClick={() => setShowGrid(!showGrid)}
-                    >
-                        {showGrid ? '✅ Grid 보이기' : '❌ Grid 숨기기'}
-                    </button>
-                </div>
 
-                {/* 5. 카메라 정보 */}
-                <div className={styles.controlsSection}>
-                    <h3 className={styles.controlsTitle}>📷 카메라 정보</h3>
-                    <ul className={styles.infoList}>
-                        <li>**Position:** {cameraInfo.position.map(v => v.toFixed(2)).join(', ')}</li>
-                        <li>**Target:** {cameraInfo.target.map(v => v.toFixed(2)).join(', ')}</li>
-                        <li>**Pitch / Yaw:** {cameraInfo.pitch.toFixed(1)}° / {cameraInfo.yaw.toFixed(1)}°</li>
-                        <li>**Distance:** {cameraInfo.distance.toFixed(2)}</li>
-                    </ul>
-                </div>
-            </div>
+                        <Suspense fallback={null}>
+                            <DepthSurfaceModel 
+                                depthData={depthMapData} 
+                                depthScale={depthScale} 
+                            />
+                        </Suspense>
+                        
+                        <CameraInfoUpdater setCameraInfo={setCameraInfo} /> 
 
-            <div className={styles.viewerArea}>
-                <Canvas camera={{ position: [0, 0, 15], fov: 50 }}>
-                    <ambientLight intensity={0.5} />
-                    <directionalLight position={[5, 10, 5]} intensity={1} />
-
-                    <Grid 
-                        renderOrder={-1} 
-                        cellSize={1} 
-                        sectionSize={5} 
-                        visible={showGrid}
-                        position={[0, 0.001, 0]} 
-                        fadeDistance={50}
-                        infiniteGrid
-                    />
-
-                    <Suspense fallback={null}>
-                        <DepthSurfaceModel 
-                            depthData={depthMapData} 
-                            depthScale={depthScale} 
+                        <OrbitControls 
+                            ref={controlsRef} 
                         />
-                    </Suspense>
+                    </Canvas>
+                </div>
+
+                {/* 컨트롤 패널 (오른쪽) */}
+                <div className={styles.controls}>
                     
-                    <CameraInfoUpdater setCameraInfo={setCameraInfo} /> 
+                    <input
+                        type="file"
+                        id="npzFileInput"
+                        accept=".npz"
+                        onChange={handleFileChange}
+                        style={{ display: 'none' }}
+                    />
+                    <button 
+                        onClick={() => document.getElementById('npzFileInput').click()}
+                        className={styles.uploadButton}
+                    >
+                        {file ? `파일 변경: ${file.name}` : 'NPZ 파일 첨부'}
+                    </button>
+                    
+                    {/* 뷰어 조정 섹션 */}
+                    <div className={styles.controlsSection}>
+                        <h3 className={styles.controlsTitle}>📊 뷰어 조정</h3>
+                        <label className={styles.sliderLabel}>
+                            Depth Scale: {depthScale.toFixed(1)}
+                            <input
+                                type="range"
+                                min="0.1"
+                                max="5.0"
+                                step="0.1"
+                                value={depthScale}
+                                onChange={(e) => setDepthScale(parseFloat(e.target.value))}
+                                className={styles.sliderInput}
+                            />
+                        </label>
+                    </div>
 
-                    {/* <OrbitControls ref={controlsRef} makeDefault /> */}
-                </Canvas>
+                    {/* 디스플레이 설정 섹션 */}
+                    <div className={styles.controlsSection}>
+                        <h3 className={styles.controlsTitle}>🖼️ 디스플레이 설정</h3>
+                        <div className={styles.toggleGroup}>
+                            <button 
+                                className={showGrid ? styles.toggleActive : styles.toggleInactive}
+                                onClick={() => setShowGrid(!showGrid)}
+                            >
+                                {showGrid ? '✅ Grid 보이기' : '❌ Grid 숨기기'}
+                            </button>
+                        </div>
+                    </div>
+                    
+                    {/* 카메라 정보 섹션 */}
+                    <div className={styles.controlsSection}>
+                        <h3 className={styles.controlsTitle}>📷 카메라 정보</h3>
+                        <ul className={styles.infoList}>
+                            <li>Position: {cameraInfo.position.map(v => v.toFixed(2)).join(', ')}</li>
+                            <li>Target: {cameraInfo.target.map(v => v.toFixed(2)).join(', ')}</li>
+                            <li>Pitch / Yaw: {cameraInfo.pitch.toFixed(1)}° / {cameraInfo.yaw.toFixed(1)}°</li>
+                            <li>Distance: {cameraInfo.distance.toFixed(2)}</li>
+                        </ul>
+                        <button 
+                            onClick={handleResetView}
+                            className={styles.resetButton}
+                        >
+                            🔄 Reset View
+                        </button>
+                    </div>
+                    
+                    {/* 조작 방법 섹션 */}
+                    <div className={styles.controlsSection}>
+                        <h3 className={styles.controlsTitle}>조작 방법 (OrbitControls)</h3>
+                        <ul className={styles.controlList}>
+                            <li>🖱️ 회전 (Rotate): 마우스 좌클릭 + 드래그</li>
+                            <li>🖐️ 이동 (Pan): 마우스 우클릭 + 드래그 또는 Ctrl/Cmd + 좌클릭 + 드래그</li>
+                            <li>🔍 확대/축소 (Zoom): 마우스 휠 스크롤</li>
+                        </ul>
+                    </div>
+
+                </div>
             </div>
         </div>
     );

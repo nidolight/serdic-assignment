@@ -119,142 +119,158 @@ const PointCloudViewer = () => {
   };
 
   return (
-    <div className={styles.container}>
-      <h2>Point Cloud Viewer</h2>
+    // 💡 변경: h2를 Flex 컨테이너 밖에 배치하여 전체 상단에 오도록 함
+    <div className={styles.containerWrapper}>
+      <h2 className={styles.mainTitle}>Point Cloud Viewer</h2> 
       
-      <div className={styles.controls}>
-        <input
-          type="file"
-          id="plyFileInput"
-          accept=".ply"
-          onChange={handleFileChange}
-          style={{ display: 'none' }}
-        />
-        <button 
-          onClick={() => document.getElementById('plyFileInput').click()}
-          className={styles.uploadButton}
-        >
-          {file ? `파일 변경: ${file.name}` : 'PLY 파일 첨부'}
-        </button>
-        <div className={styles.controlsSection}>
-          <h3 className={styles.controlsTitle}>📊 뷰어 조정</h3>
+      {/* 💡 변경: 메인 컨테이너에 flex 스타일 적용 */}
+      <div className={styles.container}> 
+        
+        {/* 뷰어 영역 (왼쪽) */}
+        <div className={styles.viewerArea}>
+          {fileUrl ? (
+            // 5. R3F Canvas 영역
+            <Canvas camera={{ position: [0, 0, 5], fov: 50 }}>
+              {/* 배경색 설정 (css 변수 대신 직접 색상 지정 가능) */}
+              <color attach="background" args={['#111']} /> 
+              
+              <ambientLight intensity={0.5} />
 
-          {/* 1. Point Size 슬라이더 */}
-          <label className={styles.sliderLabel}>
-            Point Size: {pointSize.toFixed(3)}
-            <input
-              type="range"
-              min="0.001"
-              max="0.2"
-              step="0.001"
-              value={pointSize}
-              onChange={(e) => setPointSize(parseFloat(e.target.value))}
-              className={styles.sliderInput}
-            />
-          </label>
+              <Grid 
+                renderOrder={-1} /* 다른 객체 뒤에 렌더링되도록 우선순위를 낮춤 */
+                cellSize={1} 
+                sectionSize={5} 
+                visible={showGrid}
+                position={[0, 0.001, 0]} /* 포인트 클라우드와 겹치지 않게 살짝 띄웁니다 */
+                fadeDistance={50}
+                infiniteGrid
+              />
 
-          {/* 2. Depth Scale 슬라이더 */}
-          <label className={styles.sliderLabel}>
-            Depth Scale: {depthScale.toFixed(1)}
-            <input
-              type="range"
-              min="0.1"
-              max="5.0"
-              step="0.1"
-              value={depthScale}
-              onChange={(e) => setDepthScale(parseFloat(e.target.value))}
-              className={styles.sliderInput}
-            />
-          </label>
+              <axesHelper args={[5]} visible={showAxes} />
+              
+              {/* Suspense: 데이터 로딩 중일 때 보여줄 UI 처리 (여기선 null) */}
+              <Suspense fallback={null}>
+                <Center> {/* 모델을 자동으로 화면 중앙에 배치 */}
+                  <PointCloudModel 
+                    url={fileUrl} 
+                    pointSize={pointSize} // Point Size 상태 전달
+                    depthScale={depthScale} // Depth Scale 상태 전달
+                  />
+                </Center>
+              </Suspense>
+              
+              {/* 마우스로 화면을 돌려볼 수 있게 해주는 컨트롤 */}
+              <OrbitControls makeDefault />
 
+              <CameraInfoUpdater setCameraInfo={setCameraInfo} /> 
 
-          <h3 className={styles.controlsTitle}>🖼️ 디스플레이 설정</h3>
-          
-          {/* 1. Grid 토글 버튼 */}
-          <button 
-            className={showGrid ? styles.toggleActive : styles.toggleInactive}
-            onClick={() => setShowGrid(!showGrid)}
-          >
-            {showGrid ? '✅ Grid 보이기' : '❌ Grid 숨기기'}
-          </button>
-          
-          {/* 2. Axes 토글 버튼 */}
-          <button 
-            className={showAxes ? styles.toggleActive : styles.toggleInactive}
-            onClick={() => setShowAxes(!showAxes)}
-          >
-            {showAxes ? '✅ Axes 보이기' : '❌ Axes 숨기기'}
-          </button>
-          <h3 className={styles.controlsTitle}>📷 카메라 정보</h3>
-          <ul className={styles.infoList}>
-            <li>Position: {cameraInfo.position.map(v => v.toFixed(2)).join(', ')}</li>
-            <li>Target: {cameraInfo.target.map(v => v.toFixed(2)).join(', ')}</li>
-            <li>Pitch / Yaw: {cameraInfo.pitch.toFixed(1)}° / {cameraInfo.yaw.toFixed(1)}°</li>
-            <li>Distance: {cameraInfo.distance.toFixed(2)}</li>
-          </ul>
-          <button 
-            onClick={handleResetView}
-            className={styles.resetButton}
-          >
-            🔄 Reset View
-          </button>
-        </div>
-      </div>
-
-      <div className={styles.viewerArea}>
-        {fileUrl ? (
-          // 5. R3F Canvas 영역
-          <Canvas camera={{ position: [0, 0, 5], fov: 50 }}>
-            {/* 배경색 설정 (css 변수 대신 직접 색상 지정 가능) */}
-            <color attach="background" args={['#111']} /> 
-            
-            <ambientLight intensity={0.5} />
-
-            <Grid 
-              renderOrder={-1} /* 다른 객체 뒤에 렌더링되도록 우선순위를 낮춤 */
-              cellSize={1} 
-              sectionSize={5} 
-              visible={showGrid}
-              position={[0, 0.001, 0]} /* 포인트 클라우드와 겹치지 않게 살짝 띄웁니다 */
-              fadeDistance={50}
-              infiniteGrid
-            />
-
-            <axesHelper args={[5]} visible={showAxes} />
-            
-            {/* Suspense: 데이터 로딩 중일 때 보여줄 UI 처리 (여기선 null) */}
-            <Suspense fallback={null}>
-              <Center> {/* 모델을 자동으로 화면 중앙에 배치 */}
-                <PointCloudModel 
-                  url={fileUrl} 
-                  pointSize={pointSize} // Point Size 상태 전달
-                  depthScale={depthScale} // Depth Scale 상태 전달
-                />
-              </Center>
-            </Suspense>
-            
-            {/* 마우스로 화면을 돌려볼 수 있게 해주는 컨트롤 */}
-            <OrbitControls makeDefault />
-
-            <CameraInfoUpdater setCameraInfo={setCameraInfo} /> 
-
-            <OrbitControls 
+              <OrbitControls 
               ref={controlsRef}
               makeDefault 
-            />
-          </Canvas>
-        ) : (
-          <div style={{ color: '#888' }}>포인트 클라우드 파일을 첨부해주세요.</div>
-        )}
-      </div>
-      <div className={styles.controlsSection}>
-          <h3 className={styles.controlsTitle}>조작 방법 (OrbitControls)</h3>
-          <ul className={styles.controlList}>
-            <li>🖱️ 회전 (Rotate): 마우스 좌클릭 + 드래그</li>
-            <li>🖐️ 이동 (Pan): 마우스 우클릭 + 드래그 또는 Ctrl/Cmd + 좌클릭 + 드래그</li>
-            <li>🔍 확대/축소 (Zoom): 마우스 휠 스크롤</li>
-          </ul>
+
+              maxPolarAngle={Math.PI * 0.95} // 180도(PI)보다 조금 작게 (약 171도)
+              minPolarAngle={Math.PI * 0.05} // 0도보다 조금 크게 (약 9도)
+              />
+            </Canvas>
+          ) : (
+            <div style={{ color: '#888' }}>포인트 클라우드 파일을 첨부해주세요.</div>
+          )}
         </div>
+        
+        {/* 컨트롤 패널 (오른쪽) */}
+        <div className={styles.controls}>
+          <input
+            type="file"
+            id="plyFileInput"
+            accept=".ply"
+            onChange={handleFileChange}
+            style={{ display: 'none' }}
+          />
+          <button 
+            onClick={() => document.getElementById('plyFileInput').click()}
+            className={styles.uploadButton}
+          >
+            {file ? `파일 변경: ${file.name}` : 'PLY 파일 첨부'}
+          </button>
+          
+          <div className={styles.controlsSection}>
+            <h3 className={styles.controlsTitle}>📊 뷰어 조정</h3>
+
+            {/* 1. Point Size 슬라이더 */}
+            <label className={styles.sliderLabel}>
+              Point Size: {pointSize.toFixed(3)}
+              <input
+                type="range"
+                min="0.001"
+                max="0.2"
+                step="0.001"
+                value={pointSize}
+                onChange={(e) => setPointSize(parseFloat(e.target.value))}
+                className={styles.sliderInput}
+              />
+            </label>
+
+            {/* 2. Depth Scale 슬라이더 */}
+            <label className={styles.sliderLabel}>
+              Depth Scale: {depthScale.toFixed(1)}
+              <input
+                type="range"
+                min="0.1"
+                max="5.0"
+                step="0.1"
+                value={depthScale}
+                onChange={(e) => setDepthScale(parseFloat(e.target.value))}
+                className={styles.sliderInput}
+              />
+            </label>
+          </div>
+          
+          <div className={styles.controlsSection}>
+            <h3 className={styles.controlsTitle}>🖼️ 디스플레이 설정</h3>
+            
+            <div className={styles.toggleGroup}>
+              <button 
+                className={showGrid ? styles.toggleActive : styles.toggleInactive}
+                onClick={() => setShowGrid(!showGrid)}
+              >
+                {showGrid ? '✅ Grid 보이기' : '❌ Grid 숨기기'}
+              </button>
+              <button 
+                className={showAxes ? styles.toggleActive : styles.toggleInactive}
+                onClick={() => setShowAxes(!showAxes)}
+              >
+                {showAxes ? '✅ Axes 보이기' : '❌ Axes 숨기기'}
+              </button>
+            </div>
+          </div>
+          
+          <div className={styles.controlsSection}>
+            <h3 className={styles.controlsTitle}>📷 카메라 정보</h3>
+            <ul className={styles.infoList}>
+              <li>Position: {cameraInfo.position.map(v => v.toFixed(2)).join(', ')}</li>
+              <li>Target: {cameraInfo.target.map(v => v.toFixed(2)).join(', ')}</li>
+              <li>Pitch / Yaw: {cameraInfo.pitch.toFixed(1)}° / {cameraInfo.yaw.toFixed(1)}°</li>
+              <li>Distance: {cameraInfo.distance.toFixed(2)}</li>
+            </ul>
+            <button 
+              onClick={handleResetView}
+              className={styles.resetButton}
+            >
+              🔄 Reset View
+            </button>
+          </div>
+          
+          <div className={styles.controlsSection}>
+            <h3 className={styles.controlsTitle}>조작 방법 (OrbitControls)</h3>
+            <ul className={styles.controlList}>
+              <li>🖱️ 회전 (Rotate): 마우스 좌클릭 + 드래그</li>
+              <li>🖐️ 이동 (Pan): 마우스 우클릭 + 드래그 또는 Ctrl/Cmd + 좌클릭 + 드래그</li>
+              <li>🔍 확대/축소 (Zoom): 마우스 휠 스크롤</li>
+            </ul>
+          </div>
+          
+        </div>
+      </div>
     </div>
   );
 };
