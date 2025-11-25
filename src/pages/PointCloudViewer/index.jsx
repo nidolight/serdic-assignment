@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect, Suspense } from 'react';
 import { Canvas, useLoader } from '@react-three/fiber'; // 1. R3F 핵심 모듈
-import { OrbitControls, Center } from '@react-three/drei'; // 2. 유용한 헬퍼들 (카메라 컨트롤, 중앙 정렬)
+import { OrbitControls, Center, Grid } from '@react-three/drei'; // 2. 유용한 헬퍼들 (카메라 컨트롤, 중앙 정렬)
 import { PLYLoader } from 'three/examples/jsm/loaders/PLYLoader'; // 3. PLY 파일 로더
 import styles from './PointCloudViewer.module.css';
 
@@ -35,11 +35,13 @@ const PointCloudViewer = () => {
   const [file, setFile] = useState(null);
   const [fileUrl, setFileUrl] = useState(null); // 4. 로더에 전달할 URL 상태
 
-
   const [pointSize, setPointSize] = useState(0.05); // 초기 점 크기: 0.05
   const [depthScale, setDepthScale] = useState(1.0);  // 초기 깊이 스케일: 1.0
   // 카메라 초기 정보 (위치, 타겟)
   const [cameraInfo, setCameraInfo] = useState({ position: [0, 0, 5], target: [0, 0, 0] });
+
+  const [showGrid, setShowGrid] = useState(true); // 그리드 보이기
+  const [showAxes, setShowAxes] = useState(true); // 축 보이기
 
   // 파일 선택 핸들러
   const handleFileChange = (event) => {
@@ -115,6 +117,25 @@ const PointCloudViewer = () => {
               className={styles.sliderInput}
             />
           </label>
+
+
+          <h3 className={styles.controlsTitle}>🖼️ 디스플레이 설정</h3>
+          
+          {/* 1. Grid 토글 버튼 */}
+          <button 
+            className={showGrid ? styles.toggleActive : styles.toggleInactive}
+            onClick={() => setShowGrid(!showGrid)}
+          >
+            {showGrid ? '✅ Grid 보이기' : '❌ Grid 숨기기'}
+          </button>
+          
+          {/* 2. Axes 토글 버튼 */}
+          <button 
+            className={showAxes ? styles.toggleActive : styles.toggleInactive}
+            onClick={() => setShowAxes(!showAxes)}
+          >
+            {showAxes ? '✅ Axes 보이기' : '❌ Axes 숨기기'}
+          </button>
         </div>
       </div>
 
@@ -126,6 +147,18 @@ const PointCloudViewer = () => {
             <color attach="background" args={['#111']} /> 
             
             <ambientLight intensity={0.5} />
+
+            <Grid 
+              renderOrder={-1} /* 다른 객체 뒤에 렌더링되도록 우선순위를 낮춤 */
+              cellSize={1} 
+              sectionSize={5} 
+              visible={showGrid}
+              position={[0, 0.001, 0]} /* 포인트 클라우드와 겹치지 않게 살짝 띄웁니다 */
+              fadeDistance={50}
+              infiniteGrid
+            />
+
+            <axesHelper args={[5]} visible={showAxes} />
             
             {/* Suspense: 데이터 로딩 중일 때 보여줄 UI 처리 (여기선 null) */}
             <Suspense fallback={null}>
