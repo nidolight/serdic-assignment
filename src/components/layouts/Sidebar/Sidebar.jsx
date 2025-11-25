@@ -2,9 +2,9 @@ import React from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import styles from './Sidebar.module.css';
 
-import HomeIcon from '../../../assets/icons/hamburger.png';
-import PointCloudIcon from '../../../assets/icons/point-cloud.png';
-import DepthMapIcon from '../../../assets/icons/depth-map.png';
+import HomeIcon from '@/assets/icons/hamburger.png';
+import PointCloudIcon from '@/assets/icons/point-cloud.png';
+import DepthMapIcon from '@/assets/icons/depth-map.png';
 
 const navItems = [
   { path: '/', icon: HomeIcon, label: 'Home' },
