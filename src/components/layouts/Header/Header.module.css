@@ -1,0 +1,113 @@
+/* src/components/layouts/Header/Header.module.css */
+
+/* ================================================= */
+/* 1. Header 전체 스타일 */
+/* ================================================= */
+.header {
+  position: fixed; /* 화면 상단에 고정 */
+  top: 12px;       /* Sidebar와 동일한 상단 마진 */
+  left: 90px;      /* Sidebar 너비(70px) + Sidebar 왼쪽 마진(12px) + 간격(8px) */
+  right: 12px;     /* 우측 마진 */
+  height: 60px;    /* 헤더의 높이 */
+  background-color: var(--color-bg-4); /* Sidebar와 동일한 배경색 */
+  
+  display: flex;
+  justify-content: space-between; /* 좌/우 섹션 분리 */
+  align-items: center; /* 세로 중앙 정렬 */
+  padding: 0 20px; /* 좌우 패딩 */
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.4);
+  z-index: 99; /* Sidebar보다 살짝 아래 z-index (Sidebar: 100) */
+  border-radius: 12px; /* Sidebar와 동일한 둥근 모서리 */
+
+  color: var(--color-text-p1);
+  font-family: var(--font-family-primary);
+}
+
+/* ================================================= */
+/* 2. 좌측 섹션 (로고, 타이틀) */
+/* ================================================= */
+.leftSection {
+  display: flex;
+  align-items: center;
+  gap: 15px; /* 로고와 타이틀 사이 간격 */
+}
+
+.logo {
+  font-weight: bold;
+  font-size: 24px;
+  color: var(--color-link); /* 로고 색상 */
+}
+
+.logoImage {
+  height: 45px;
+  width: auto; 
+
+}
+
+.title {
+  font-size: 18px;
+  color: var(--color-text-headline); /* 타이틀 텍스트 색상 */
+}
+
+/* ================================================= */
+/* 3. 우측 섹션 (버튼, 언어, 프로필, 시간) */
+/* ================================================= */
+.rightSection {
+  display: flex;
+  align-items: center;
+  gap: 15px; /* 요소들 사이의 간격 */
+}
+
+/* Header 내 버튼은 Tertiary variant를 사용하지만, 좀 더 깔끔하게 보이도록 조정 */
+.rightSection .button { /* Button 컴포넌트의 기본 .btn 클래스 */
+  background-color: transparent;
+  border: none;
+  color: var(--color-text-p1);
+  padding: 8px; /* 버튼 패딩 조정 */
+  min-width: unset; /* Button 컴포넌트의 min-width가 있다면 제거 */
+}
+
+.rightSection .button:hover {
+  background-color: var(--color-bg-5); /* 호버 시 배경색 */
+  border-radius: 8px;
+}
+
+.language {
+  font-weight: 200;
+  color: var(--color-text-p1); /* 언어 텍스트 색상 */
+}
+
+.profile {
+  font-weight: 200;
+  color: var(--color-text-p1);
+}
+
+.time {
+  font-size: 16px;
+  color: var(--color-text-p2);
+}
+
+.timeContainer {
+  width: 70px; 
+  height: 40px; 
+  
+  display: flex;
+  justify-content: flex-end;
+  align-items: center; 
+  
+  color: #FFFFFF; 
+  position: relative; 
+  font-size: 16px;
+}
+
+
+.mainTime {
+  font-size: 1.2em; 
+  margin-right: 25px;
+}
+
+.meridian {
+  font-size: 65%; width: 20px;
+  position: absolute; 
+  top: 10px; 
+}

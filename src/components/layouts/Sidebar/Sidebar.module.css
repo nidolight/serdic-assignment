@@ -82,8 +82,8 @@
 }
 
 .active .iconImage {
-  filter: none; /* 흑백 필터 제거 (원래 색상 복원) */
-  opacity: 1; /* 투명도 제거 (최대 밝기) */
+  filter: none;
+  opacity: 1;
 }
 
 .active:hover .iconImage {
