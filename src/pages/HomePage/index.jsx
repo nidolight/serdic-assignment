@@ -1,7 +1,5 @@
-// src/pages/HomePage.jsx
-
 import React from 'react';
-import Button from '../components/common/Button/Button'; // Button 컴포넌트 import (index.jsx 사용 가정)
+import Button from '@/components/common/Button/Button';
 
 const HomePage = () => {
   return (

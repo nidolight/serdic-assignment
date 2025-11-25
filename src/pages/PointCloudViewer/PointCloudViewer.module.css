@@ -1,0 +1,104 @@
+.viewerArea {
+  background-color: var(--color-bg-7); 
+  border-radius: 8px;
+  overflow: hidden; 
+  /* ❗ 중요: 자식 요소가 공간을 채우도록 Flex 컨테이너 속성 추가 ❗ */
+  display: flex; 
+  /* flex-grow: 1; */ /* 이미 Grid로 크기가 설정되어 있어 필요 없지만, 안전을 위해 */
+  
+  /* 기존에 있던 justify/align-items는 Canvas 렌더링 시 제거하거나 주석 처리해야 합니다. 
+     지금은 Canvas가 100%를 차지하게 하는 데 집중합니다. */
+  justify-content: center;
+  align-items: center;
+}
+
+/* ❗ 추가: viewerArea 내부의 Canvas(실제 3D 뷰포트)를 100%로 설정 ❗ */
+.viewerArea canvas {
+  width: 100% !important;
+  height: 100% !important;
+  display: block;
+}
+
+.sliderLabel {
+  display: block;
+  margin-bottom: 10px;
+  font-size: 14px;
+  color: var(--color-text-body);
+}
+
+.sliderInput {
+  /* 브라우저 기본 스타일 초기화 */
+  -webkit-appearance: none;
+  appearance: none;
+  width: 100%;
+  height: 8px;
+  background: var(--color-bg-4);
+  outline: none;
+  opacity: 0.7;
+  transition: opacity 0.2s;
+  border-radius: 4px;
+}
+
+.sliderInput:hover {
+  opacity: 1;
+}
+
+/* 슬라이더 핸들(thumb) 스타일링 */
+.sliderInput::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 16px;
+  height: 16px;
+  background: var(--color-link);
+  cursor: pointer;
+  border-radius: 50%;
+}
+
+.sliderInput::-moz-range-thumb {
+  width: 16px;
+  height: 16px;
+  background: var(--color-link);
+  cursor: pointer;
+  border-radius: 50%;
+}
+
+.toggleGroup {
+  display: flex;
+  gap: 10px;
+}
+
+.toggleButton, .toggleButtonActive {
+  padding: 8px 12px;
+  border: 1px solid var(--color-border-1);
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 13px;
+  transition: background-color 0.2s, border-color 0.2s;
+  flex-grow: 1; /* 가로 공간을 균등하게 채우기 */
+}
+
+/* 비활성화 상태 스타일 */
+.toggleButton {
+  background-color: var(--color-bg-4);
+  color: var(--color-text-body);
+}
+
+/* 활성화 상태 스타일 */
+.toggleButtonActive {
+  background-color: var(--color-link);
+  color: #FFFFFF;
+  border-color: var(--color-link);
+}
+
+.infoBox {
+  font-size: 13px;
+  line-height: 1.5;
+  background-color: var(--color-bg-4);
+  padding: 10px;
+  border-radius: 4px;
+}
+
+.infoBox p {
+  margin: 0;
+  color: var(--color-text-p1);
+}

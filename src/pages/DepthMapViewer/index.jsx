@@ -1,5 +1,3 @@
-// src/pages/DepthMapViewer.jsx
-
 import React from 'react';
 
 const DepthMapViewer = () => {
