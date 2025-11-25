@@ -1,16 +1,80 @@
-# React + Vite
+# 🌐 웹 기반 3D 및 뎁스/포인트클라우드 뷰어 프로토타입 구현
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+![Build Status](https://img.shields.io/badge/status-In%20Progress-yellowgreen)
+![License](https://img.shields.io/badge/license-MIT-blue)
 
-Currently, two official plugins are available:
+## 📌 1. 프로젝트 개요 및 목표
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+이 프로젝트는 웹 환경에서 **3D 모델** 및 **뎁스/포인트클라우드 데이터**를 효율적으로 시각화하고 탐색할 수 있는 뷰어 프로토타입을 구현하는 것을 목표로 합니다.
 
-## React Compiler
+**주요 과제 주제:** 웹 기반 3D 뷰어 페이지 및 뎁스/포인트클라우드 뷰어 프로토타입 구현
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+**주요 목표:**
 
-## Expanding the ESLint configuration
+* 사용자 친화적인 페이지 레이아웃 및 웹 디자인 구현.
+* 뎁스 데이터 및 포인트 클라우드 데이터를 웹에서 시각화하는 프로토타입 기능 검증.
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+---
+
+## 🛠️ 2. 개발 환경 및 기술 스택 (Tech Stack)
+
+**[작성 예정]**
+
+---
+
+## 🚀 3. 빌드 및 실행 방법 요약 (Quick Start Guide)
+
+프로젝트를 로컬 환경에서 실행하기 위한 간단한 가이드입니다.
+
+### 3.1. 전제 조건
+
+* **Node.js** (LTS 버전 권장) 및 **npm** 설치
+
+### 3.2. 프로젝트 설치
+
+1.  **레포지토리 클론:**
+    ```bash
+    git clone [HTTPS 레포지토리 URL]
+    cd [레포지토리 이름]
+    ```
+2.  **의존성 설치:**
+    ```bash
+    npm install
+    ```
+
+### 3.3. 실행 및 빌드
+
+| 명령어 | 설명 |
+| :--- | :--- |
+| `npm run dev` | 개발 모드로 서버를 실행합니다. (일반적으로 `http://localhost:5173` 접속) |
+| `npm run build` | 배포를 위한 프로덕션용 파일(`dist` 폴더)을 빌드합니다. |
+
+---
+
+## 📐 4. 구현 내용 및 주요 기능
+
+**[작성 예정]**
+
+---
+
+## ⚠️ 5. 미구현 및 향후 개선 방향
+
+**[작성 예정]**
+
+---
+
+## 🤝 6. 커밋 컨벤션 (Commit Convention)
+
+이 프로젝트는 **Conventional Commits** 규칙을 따르며, 모든 커밋 메시지는 다음 형식 중 하나를 사용해야 합니다.
+
+**형식:** `<타입>[선택적 범위]: <제목>`
+
+| 타입 (Type) | 설명 (Description) | 예시 (Example) |
+| :--- | :--- | :--- |
+| **`feat`** | **새로운 기능** 추가 | `feat: 사용자 로그인 기능 구현` |
+| **`fix`** | 버그 수정 | `fix: 3D 뷰어 초기 로드 시 깜빡임 현상 수정` |
+| **`docs`** | 문서 변경 (README, 가이드 등) | `docs: 커밋 컨벤션 정보 추가` |
+| **`style`** | 코드 스타일 변경 (포맷팅, 세미콜론 등, 로직 변경 없음) | `style: 함수 코드 포맷팅 정리` |
+| **`refactor`** | 코드 리팩토링 (기능 변경 없이 코드 구조 개선) | `refactor: 뷰어 컴포넌트 로직 분리` |
+| **`test`** | 테스트 코드 추가/수정 | `test: 3D 로더 유닛 테스트 추가` |
+| **`chore`** | 빌드 시스템, 라이브러리 설치 등 기타 변경 (개발 환경 관련) | `chore: Three.js 라이브러리 업데이트` |
